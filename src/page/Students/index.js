@@ -1,7 +1,5 @@
-import logo from './logo.svg';
-import './App.css';
 import React, { useState } from 'react';
-
+import { Link } from 'react-router-dom';
 
 const list = [
   {
@@ -19,7 +17,7 @@ const list = [
 ];
 
 
-const App = () =>{
+const Students = () =>{
   const [studentList, setStudentList] = useState(list)
 
   return (
@@ -31,9 +29,10 @@ const App = () =>{
       </ul>
       <div>
             <ul>
-                <li><a href="search.html">Search</a></li>
-                <li><a href="students.html">Students</a></li>
-                <li><a href="index.html">Home</a></li>
+                <li><Link to="/search">Search</Link></li>
+                <li><Link to="/students">Students</Link></li><li>
+                <Link to="/index">Home</Link></li>
+
               </ul>
         </div>
         <h1>Student</h1>
@@ -68,4 +67,4 @@ const App = () =>{
   );
 }
 
-export default App;
+export default Students;
