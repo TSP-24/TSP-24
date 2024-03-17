@@ -9,7 +9,7 @@ Navigate to the directory **venv** and run the command below based on your OS:
 
 ### On Windows:
 
-**venv\Scripts\activate**
+**`venv\Scripts\activate`**
 
 ### On Unix or MacOS:
 
