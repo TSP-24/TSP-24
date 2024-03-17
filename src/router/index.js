@@ -4,7 +4,7 @@ import Students from "../page/Students";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
-    {path: '/index',
+    {path: '/',
      element:<Home/>
 
     },

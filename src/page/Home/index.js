@@ -87,7 +87,7 @@ const Home = ()=>{
             <ul>
                 <li><Link to="/search">Search</Link></li>
                 <li><Link to="/students">Students</Link></li><li>
-                <Link to="/index">Home</Link></li>
+                <Link to="/">Home</Link></li>
 
               </ul>
         </div>
