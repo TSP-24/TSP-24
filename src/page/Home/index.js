@@ -3,7 +3,6 @@ import FileSaver from 'file-saver';
 import Papa from "papaparse";
 import jschardet from "jschardet";
 import iconv from "iconv-lite";
-import encoding from "encoding";
 
 import React, { useState } from 'react';
 import { Button, Upload, notification } from 'antd';
