@@ -12,13 +12,13 @@ Navigate to the directory **venv** and run the command below based on your OS:
 #### On Windows:
 
 
-**`venv\Scripts\activate`**
+**`Scripts\activate`**
 
 
 #### On Unix or MacOS:
 
 
-**`source venv/bin/activate`** 
+**`source bin/activate`** 
 
 
 ## Install Dependencies:
@@ -39,6 +39,6 @@ After successfully activating the virtual environment and installing dependencie
 
 
 ## Verify Functionality:
-Verify that the Flask application is running as expected and you can access any endpoints or functionality you've implemented. Do this by navigating to **http://localhost:5000** in a web browser or using tools like cURL or Postman to make requests to the server. You should see the following
+Verify that the Flask application is running as expected and you can access any endpoints or functionality you've implemented. Do this by navigating to the link showing on the "Running on" part of the terminal in a web browser or using tools like cURL or Postman to make requests to the server. You should see the following
 
 ![image](https://github.com/TSP-24/TSP-24/assets/110961902/dfd66861-3158-40bf-a7d5-c6fdd221eed8)
