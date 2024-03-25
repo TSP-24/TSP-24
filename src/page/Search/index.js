@@ -3,13 +3,11 @@ import { Link } from "react-router-dom";
 const Search = ()=>{
     return (
     <div className="search">
-        <head>
             <title>Search Page</title>
 
             <link rel="stylesheet" href="../CSS/bar.css"/>
         <link rel="stylesheet" href="../CSS/button.css"/>
         <link rel="stylesheet" href="../CSS/input.css"/>
-       </head>
 
         <div>
             <ul>
@@ -26,7 +24,7 @@ const Search = ()=>{
             <input type="text" id="search" name="search" placeholder="ID or Student name"/>
         </form>
 
-        <button class="button buttong" onclick="window.location='student_logs.html';">Search</button>
+        <button className="button buttong" onClick="window.location='student_logs.html';">Search</button>
     </div>
  );
 }
