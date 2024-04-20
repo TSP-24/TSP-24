@@ -1,0 +1,14 @@
+CourseID,Course Name,Convenor,Assessment,Type,Due,Mark,Percentage
+3610,Principle Prog.,Alice,Quiz: Voluntary Quiz (Real),Normal,2024/3/15,10,0
+3610,Principle Prog.,Alice,Assignment: Assessment 1 (Real),Normal,2024/4/15,100,5
+3610,Principle Prog.,Alice,Assignment: Assessment 2 (Real),Normal,2024/5/5,100,10
+3610,Principle Prog.,Alice,Assignment: Assessment 3 (Real),Normal,2024/5/15,100,10
+3610,Principle Prog.,Alice,Assignment: Assessment 4 (Real),Normal,2024/5/25,100,10
+3610,Principle Prog.,Alice,Assignment: Oral Exam (Real),Hurdle,2024/6/15,100,65
+3620,AI,Bob,Assignment: Assessment 1 ,Normal,2024/2/3,100,15
+3620,AI,Bob,Assignment: Assessment 2,Hurdle,2024/2/4,100,15
+3620,AI,Bob,Assignment: Assessment 3 ,Normal,2024/3/5,100,15
+3620,AI,Bob,Assignment: Exam ,Normal,2024/4/6,100,40
+3630,ToC,Charlie,Quiz,Hurdle,2024/2/2,15,5
+3630,ToC,Charlie,Exam1,Normal,2024/4/20,100,40
+3630,ToC,Charlie,Exam2,Normal,2024/6/20,100,55
