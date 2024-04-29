@@ -7,6 +7,8 @@ import { Button, Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { setImportedData } from "../../store/modules/importedDataStore";
+import {classifyColumnLabels} from "../../utils/scoreTypeClasscify";
+import { setScoreType } from "../../store/modules/scoreTypeStore";
 
 
 const { Dragger } = Upload;
@@ -14,6 +16,8 @@ const { Dragger } = Upload;
 const Home = () => {
   const [nextStepVisible, setNextStepVisible] = useState(false);
   const importedData = useSelector((state) => state.importedData);
+  const scoreType = useSelector((state) => state.scoreType);
+
   const dispatch = useDispatch();
 
   const parseUploadCSVData = (file, callback) => {
@@ -42,7 +46,17 @@ const Home = () => {
   
           // Use the first row as column labels
           const columnLabels = res[0];
-  
+
+          // 
+          const classifiedLabels = classifyColumnLabels(columnLabels);
+
+          dispatch(setScoreType(classifiedLabels.quiz));
+          dispatch(setScoreType(classifiedLabels.exam));
+          dispatch(setScoreType(classifiedLabels.assignment));
+          dispatch(setScoreType(classifiedLabels.attendance));
+          console.log("classifiedLabels",classifiedLabels)
+
+          console.log(scoreType);  
           // Convert CSV data to JSON format
           const jsonData = res.slice(1).map(row => {
             const obj = {};
