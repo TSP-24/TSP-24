@@ -1,3 +1,11 @@
+# Team Members
+aiushiusi--Qingyue Ren  
+lyj0209--Yujun Lu  
+wyfgood1999--Yifan Wang  
+xuanan20020--Xuan An Tran  
+u7529136--Zihan Li  
+ahmadMusawi--Ahmed Mousawi  
+
 # Setup the back-end environment
 Pull Changes from the Remote Repository:
 Your team members should pull the latest changes from the remote repository (GitHub) to ensure they have the latest code, including the back-end setup you've implemented. They can use the following command:
