@@ -26,10 +26,10 @@ def generate_scores(num_students, mean, std):
     return scores
 
 # Generate student data
-def generate_student_data(num_students, mean, std):
+def generate_student_data(num_students):#, mean, std):
     student_names = generate_student_names(num_students)
     student_ids = generate_student_ids(num_students)
-    scores = generate_scores(num_students, mean, std)
+    #scores = generate_scores(num_students, mean, std)
     data = {"First name": [], "Last name": [], "Uni ID": [], "Email address": [], "Groups": []}
     for i in range(num_students):
         first_name, last_name = student_names[i]
@@ -41,7 +41,7 @@ def generate_student_data(num_students, mean, std):
         data["Uni ID"].append(uni_id)
         data["Email address"].append(email)
         data["Groups"].append(groups)
-    return pd.DataFrame(data), scores
+    return pd.DataFrame(data)#, scores
 
 
 
@@ -93,8 +93,11 @@ def main():
     # Generate grades data for the selected course
     grades_data = generate_grades_data(int(num_students), scores, filtered_course_data)
 
+    student_data = generate_student_data(num_students)
+
+    result = pd.concat([grades_data, student_data], axis=1)
     # Save grades data to a CSV file
-    grades_data.to_csv("generated_grades_data3620.csv", index=False)
+    result.to_csv("generated_grades_data3620.csv", index=False)
 
 # Main function
 

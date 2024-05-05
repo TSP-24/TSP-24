@@ -26,8 +26,12 @@ def main(course_id, num_students):
     # Generate grades data for the selected course
     grades_data = mg.generate_grades_data(int(num_students), scores, filtered_course_data)
 
+    student_data = mg.generate_student_data(num_students)
+
+    result = pd.concat([student_data, grades_data], axis=1)
+
     # Save grades data to a CSV file
-    grades_data.to_csv('generated' + str(course_id) + '.csv', index=False)
+    result.to_csv('generated' + str(course_id) + '.csv', index=False)
     print(filtered_course_data)
 
 
