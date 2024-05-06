@@ -2,10 +2,6 @@ import os
 import pandas as pd
 import numpy as np
 import re
-from IPython.display import display
-
-# Define the file path
-file_path = '../fakedata/g24002.csv'
 
 def get_course_weights(course):
     # Load the course data
@@ -40,9 +36,6 @@ def get_course_weights(course):
     return assessment_weights
 
 def filter_headers(file_path):  
-    # File path
-    file_path = '../fakedata/g24002.csv'
-
     # Extract the numerical part (courseID) using a regular expression
     course = re.search(r'\d+', file_path)
     if course:
@@ -69,8 +62,8 @@ def filter_headers(file_path):
         'uni_id': ['uni', 'id'],
         'total': ['total'],
         'px_exam': ['da/px exam'],
-        'final_exam': ['final exam','oral exam'],
         'midsem_exam': ['midsem exam'],
+        'final_exam': ['final exam','oral exam','exam'],
         'assignment': ['assignment: assignment','assignment: assessment','assignment'],
         'quiz': ['quiz: quiz'],
         'attendance': ['attendance'],
