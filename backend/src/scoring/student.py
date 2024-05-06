@@ -47,6 +47,7 @@ class Student:
         self.final_exam = None
         self.attendance = None # Later to be implemented
         self.labs = [] # Later to be implemented
+
         self.engagement_score = 100
         self.failed_assessments = []
         self.late_submissions = [] # To be implemented!!!
@@ -65,10 +66,16 @@ class Student:
             'final_exam': 20
         }
         self.hd_rewards = {
-            'quiz': 0,
+            'quiz': 2,
             'assignment': 5,
             'midsem_exam': 10,
             'final_exam': 15
+        }
+        self.d_rewards = {
+            'quiz': 1,
+            'assignment': 3,
+            'midsem_exam': 5,
+            'final_exam': 8
         }
 
     def set_weights(self, weights):
@@ -83,6 +90,8 @@ class Student:
             self.failed_assessments.append('Quiz ' + str(len(self.quizzes)))
         elif grade == 'HD':
             self.engagement_score += self.hd_rewards['quiz']
+        elif grade == 'D':
+            self.engagement_score += self.d_rewards['quiz']
 
         # Check if the student is consistent with their quiz scores
         if len(self.quizzes) > 1:
@@ -98,6 +107,8 @@ class Student:
             self.failed_assessments.append('Assignment ' + str(len(self.assignments)))
         elif grade == 'HD':
             self.engagement_score += self.hd_rewards['assignment']
+        elif grade == 'D':
+            self.engagement_score += self.d_rewards['assignment']
         
         # Check if the student is consistent with their assignment scores
         if len(self.assignments) > 1:
@@ -113,6 +124,8 @@ class Student:
             self.failed_assessments.append('Midsem Exam')
         elif grade == 'HD':
             self.engagement_score += self.hd_rewards['midsem_exam']
+        elif grade == 'D':
+            self.engagement_score += self.d_rewards['midsem_exam']
 
     def add_final_exam(self, score):
         grade = score_to_grade(score)
@@ -123,6 +136,8 @@ class Student:
             self.failed_assessments.append('Final Exam')
         elif grade == 'HD':
             self.engagement_score += self.hd_rewards['final_exam']
+        elif grade == 'D':
+            self.engagement_score += self.d_rewards['final_exam']
 
     # TODO: Implement attendance and labs
     def add_lab(self, score):

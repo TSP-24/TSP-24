@@ -38,26 +38,26 @@ def calculate_engagement(csv_file):
         # Quiz engagement
         if quiz_headers != None:
             for quiz in quiz_headers:
-                student.add_quiz(float(row[quiz]))
+                student.add_quiz(int(row[quiz]))
         # Assignment engagement
         if asg_headers != None:
             for asg in asg_headers:
-                student.add_assignment(float(row[asg]))
+                student.add_assignment(int(row[asg]))
 
         # Lab engagement
         if lab_headers != None:
             for lab in lab_headers:
-                student.add_lab(float(row[lab]))
+                student.add_lab(int(row[lab]))
         # Attendance engagement
         if attendance_header != None:
-            student.add_attendance(float(row[attendance_header]))
+            student.add_attendance(int(row[attendance_header]))
 
         # Midsem exam engagement
         if midsem_exam_header != None:
-            student.add_midsem_exam(float(row[midsem_exam_header]))
+            student.add_midsem_exam(int(row[midsem_exam_header]))
         # Final exam engagement
         if final_exam_header != None:
-            student.add_final_exam(float(row[final_exam_header]))
+            student.add_final_exam(int(row[final_exam_header]))
 
         engagement_scores.append(student.engagement_score)
         uids.append(student.uni_id)
@@ -75,5 +75,3 @@ def calculate_engagement(csv_file):
 
     # Save the DataFrame to a CSV file in the same directory
     df.to_csv('scored_' + os.path.basename(csv_file), index=False)
-
-calculate_engagement('../fakedata/generated2400.csv')
