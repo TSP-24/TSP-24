@@ -1,10 +1,9 @@
-import os
 import pandas as pd
 from student import Student
 from csv_parser import filter_headers
 
-def calculate_engagement(csv_file):
-    df, headers, weights = filter_headers(csv_file)
+def calculate_engagement(csv_file, csv_name):
+    df, headers, weights = filter_headers(csv_file, csv_name)
     # Singular items
     id_header, final_exam_header, midsem_exam_header, attendance_header = None, None, None, None
     # Items with multiple iterations
@@ -72,6 +71,5 @@ def calculate_engagement(csv_file):
 
     # Add a 'Risk' column by dividing the sorted DataFrame into 5 groups of equal size
     df['Risk'] = pd.qcut(df['Engagement'], 5, labels=['Very high', 'High', 'Average', 'Low', 'Very low'])
-
-    # Save the DataFrame to a CSV file in the same directory
-    df.to_csv('scored_' + os.path.basename(csv_file), index=False)
+    
+    return df

@@ -2,10 +2,17 @@ import os
 import pandas as pd
 import numpy as np
 import re
+from io import StringIO
 
 def get_course_weights(course):
+    # Get the directory of the current script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Construct the path to the CSV file
+    csv_path = os.path.join(script_dir, '..', 'fakedata', 'compcourse.csv')
+    
     # Load the course data
-    df = pd.read_csv('../fakedata/compcourse.csv')
+    df = pd.read_csv(csv_path)
 
     # Filter the data for the specified course
     df = df[df['CourseID'] == course]
@@ -35,28 +42,14 @@ def get_course_weights(course):
 
     return assessment_weights
 
-def filter_headers(file_path):  
+def filter_headers(file, filename):  
     # Extract the numerical part (courseID) using a regular expression
-    course = re.search(r'\d+', file_path)
+    course = re.search(r'\d+', filename)
     if course:
         course = int(course.group()[:4])
 
-    # Check if the directory exists
-    if os.path.exists(os.path.dirname(file_path)):
-        # Load the data
-        df = pd.read_csv(file_path)
-
-        # Replace '-' with NaN
-        df = df.replace('-', np.nan)
-
-        # Drop columns where all values are NaN
-        df = df.dropna(axis=1, how='all')
-
-        # Get the column headers
-        headers = df.columns.tolist()
-
-    else:
-        print(f"The directory does not exist: {os.path.dirname(file_path)}")
+    df = pd.read_csv(StringIO(file))
+    headers = df.columns.to_list()
     # Define categories and their keywords
     categories_keywords = {
         'uni_id': ['uni', 'id'],
