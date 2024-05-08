@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
+import re
 
 # Generate student names
 def generate_student_names(num_students):
@@ -25,27 +26,6 @@ def generate_scores(num_students, mean, std):
     scores = np.round(np.clip(scores, 0, 100), 2)  # Limit scores between 0 and 100, and round to two decimal places
     return scores
 
-# Generate student submission times based on due date and a threshold percentage
-def generate_submission_times(num_students, due_date, threshold_percentage):
-    '''
-    Decide the specific student who submitted the assignment late first,
-    then generate the specific submission time.
-
-    :param num_students:
-    :param due_date:
-    :param threshold_percentage:
-    :return: submission_times (the date format)
-    '''
-    submission_times = []
-    for i in range(num_students):
-        submit_on_time = np.random.choice([True, False], p=[threshold_percentage / 100, (100 - threshold_percentage) / 100])
-        if submit_on_time:
-            submission_times.append(due_date)
-        else:
-            # Generate a random submission time after the due date
-            submission_time = due_date + timedelta(days=np.random.randint(1, 10))
-            submission_times.append(submission_time)
-    return submission_times
 
 # Generate student data
 def generate_student_data(num_students):#, mean, std):
@@ -66,25 +46,36 @@ def generate_student_data(num_students):#, mean, std):
     return pd.DataFrame(data)#, scores
 
 
-
 # Generate grades data
-def generate_grades_data(num_students, scores, course_data):
+def generate_grades_data(num_students, scores, course_data, threshold_percentage):
     grades_data = {"Course total (Real)": [], "Last downloaded from this course": []}
     for i in range(num_students):
         total_score = 0
+
+        # Generate student submission times based on due date and a threshold percentage
         for _, row in course_data.iterrows():
+            due_date = datetime.strptime(row["Due"], '%Y/%m/%d')
+            # Decide the specific student who submitted the assignment late first, then generate the specific submission time.
+            submit_on_time = np.random.choice([True, False], p=[threshold_percentage / 100, (100 - threshold_percentage) / 100])
+            if submit_on_time:
+                submission_time = due_date - timedelta(days=np.random.randint(1, 10))
+            else:
+                # Generate a random submission time after the due date
+                submission_time = due_date + timedelta(days=np.random.randint(1, 10))
             assessment = row["Assessment"]
             weight = row["Percentage"]
-
             grade = np.random.choice(scores, p=np.ones(len(scores)) / len(scores))
             if assessment not in grades_data:
-                grades_data[assessment] = []
+                grades_data[assessment] = []  # Initialize the list for this assessment if not present
+            if f"Submit_{assessment}" not in grades_data:
+                grades_data[f"Submit_{assessment}"] = []  # Initialize the list for submission times if not present
             grades_data[assessment].append(grade)
+            grades_data[f"Submit_{assessment}"].append(submission_time)
             total_score += grade * weight / 100
         grades_data["Course total (Real)"].append(total_score)
         grades_data["Last downloaded from this course"].append(0)
-    return pd.DataFrame(grades_data)
 
+    return pd.DataFrame(grades_data)
 
 
 
@@ -98,7 +89,7 @@ def main():
     num_students = 50
     mean = 70  # Mean total score
     std = 15  # Standard deviation
-
+    threshold_percentage = 95  # Percentage of students who submit on time
 
     # Load course data
     course_data = pd.read_csv("compcourse.csv")
@@ -113,7 +104,9 @@ def main():
     scores = generate_scores(int(num_students), mean, std)
 
     # Generate grades data for the selected course
-    grades_data = generate_grades_data(int(num_students), scores, filtered_course_data)
+    # grades_data = generate_grades_data(int(num_students), scores, filtered_course_data)
+    grades_data = generate_grades_data(int(num_students), scores, filtered_course_data, threshold_percentage)
+
 
     student_data = generate_student_data(num_students)
 

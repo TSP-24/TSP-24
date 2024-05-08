@@ -5,7 +5,7 @@ import mark_generator as mg
 
 
 # Main function
-def main(course_id, num_students):
+def main(course_id, num_students, threshold_percentage):
     num_students = int(num_students)
     mean = 70  # Mean total score
     std = 15  # Standard deviation
@@ -24,7 +24,8 @@ def main(course_id, num_students):
     scores = mg.generate_scores(int(num_students), mean, std)
 
     # Generate grades data for the selected course
-    grades_data = mg.generate_grades_data(int(num_students), scores, filtered_course_data)
+    # grades_data = mg.generate_grades_data(int(num_students), scores, filtered_course_data)
+    grades_data = mg.generate_grades_data(int(num_students), scores, filtered_course_data, int(threshold_percentage))
 
     student_data = mg.generate_student_data(num_students)
 
@@ -41,4 +42,5 @@ def main(course_id, num_students):
 if __name__ == "__main__":
     course_id = input("Enter course id: ")
     num_students = input("Enter student numbers: ")
-    main(course_id, num_students)
+    threshold_percentage = input("Enter student submit threshold: ")
+    main(course_id, num_students, threshold_percentage)
