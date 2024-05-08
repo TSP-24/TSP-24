@@ -93,4 +93,4 @@ def filter_headers(file, filename):
         # Drop the original 'px_exam' and 'final_exam' columns
         df = df.drop(columns=[category_headers['px_exam'][0]])
 
-    return df, category_headers, get_course_weights(course)
+    return df, category_headers, get_course_weights(course), course

@@ -3,7 +3,7 @@ from student import Student
 from csv_parser import filter_headers
 
 def calculate_engagement(csv_file, csv_name):
-    df, headers, weights = filter_headers(csv_file, csv_name)
+    df, headers, weights, course = filter_headers(csv_file, csv_name)
     # Singular items
     id_header, final_exam_header, midsem_exam_header, attendance_header = None, None, None, None
     # Items with multiple iterations
@@ -25,6 +25,7 @@ def calculate_engagement(csv_file, csv_name):
     
     engagement_scores = []
     uids = []
+    failed_assessments = []
 
     for index, row in df.iterrows():
         # Create student object
@@ -60,11 +61,17 @@ def calculate_engagement(csv_file, csv_name):
 
         engagement_scores.append(student.engagement_score)
         uids.append(student.uni_id)
+        failed_assessments.append(student.failed_assessments)
         
     # Append the engagement scores to the dataframe and add uid column (if neccessary)
     if 'Uni ID' not in df.columns:
         df.insert(0, 'Uni ID', uids)
     df['Engagement'] = engagement_scores
+    df['Failed Assessments'] = failed_assessments
+    df['Fail#'] = df['Failed Assessments'].apply(len)
+    df['Late#'] = 0
+    df['No Submit#'] = 0
+    df['Course'] = 'COMP' + str(course)
 
     # Sort the DataFrame by the engagement value from lowest to highest
     df = df.sort_values('Engagement')
@@ -72,4 +79,7 @@ def calculate_engagement(csv_file, csv_name):
     # Add a 'Risk' column by dividing the sorted DataFrame into 5 groups of equal size
     df['Risk'] = pd.qcut(df['Engagement'], 5, labels=['Very high', 'High', 'Average', 'Low', 'Very low'])
     
-    return df
+    # Create a new DataFrame with only the 'Uni ID', 'Failed Assessments', and 'Risk' columns
+    new_df = df[['Uni ID', 'Course', 'Failed Assessments', 'Fail#', 'Late#', 'No Submit#','Risk']]
+
+    return new_df

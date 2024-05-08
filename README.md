@@ -31,11 +31,13 @@ Pull requests are how we review code, once development is ready, we submit a pul
 
 # Running the program
 
-Before running the program, make sure to install all the dependencies, in the **frontend** directory:
+Before running the program, make sure to install all the dependencies:
+- In the **backend** directory run: 
+    ### `pip install -r requirements.txt` ###
+- In the **frontend** directory run: 
+    ### `npm install` ###
 
-### `npm install`
-
-In the **frontend** directory, you can run:
+Finally, in the **frontend** directory, you can run:
 
 ### `npm start`
 
