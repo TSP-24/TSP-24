@@ -49,6 +49,7 @@ class Student:
         self.labs = [] # Later to be implemented
 
         self.engagement_score = 100
+        self.engagement_changes = []
         self.failed_assessments = []
         self.late_submissions = [] # To be implemented!!!
         self.weights = {
@@ -87,7 +88,8 @@ class Student:
         # Check if the student failed the quiz or got a HD
         if grade == 'Fail':
             self.engagement_score -= self.failed_punishments['quiz']
-            self.failed_assessments.append('Quiz ' + str(len(self.quizzes)))
+            self.failed_assessments.append(f'Quiz {str(len(self.quizzes))}: {score}')
+            self.engagement_changes.append((f'Failed Quiz {str(len(self.quizzes))}', -self.failed_punishments['quiz']))
         elif grade == 'HD':
             self.engagement_score += self.hd_rewards['quiz']
         elif grade == 'D':
@@ -96,7 +98,10 @@ class Student:
         # Check if the student is consistent with their quiz scores
         if len(self.quizzes) > 1:
             inconsistency = chi_square_compare(self.quizzes)
-            self.engagement_score += np.round(inconsistency * self.weights['quiz'])
+            score_change = np.round(inconsistency * self.weights['quiz'])
+            self.engagement_score += score_change
+            if score_change < 0:
+                self.engagement_changes.append((f'Inconsistent Quiz {str(len(self.quizzes))}', score_change))
 
     def add_assignment(self, score):
         grade = score_to_grade(score)
@@ -104,7 +109,8 @@ class Student:
         # Check if the student failed the assignment or got a HD
         if grade == 'Fail':
             self.engagement_score -= self.failed_punishments['assignment']
-            self.failed_assessments.append('Assignment ' + str(len(self.assignments)))
+            self.failed_assessments.append(f'Assignment {str(len(self.assignments))}: {score}')
+            self.engagement_changes.append((f'Failed Assignment {str(len(self.assignments))}', -self.failed_punishments['assignment']))
         elif grade == 'HD':
             self.engagement_score += self.hd_rewards['assignment']
         elif grade == 'D':
@@ -113,7 +119,10 @@ class Student:
         # Check if the student is consistent with their assignment scores
         if len(self.assignments) > 1:
             inconsistency = chi_square_compare(self.assignments)
-            self.engagement_score += np.round(inconsistency * self.weights['assignment'])
+            score_change = np.round(inconsistency * self.weights['assignment'])
+            self.engagement_score += score_change
+            if score_change < 0:
+                self.engagement_changes.append((f'Inconsistent Assignment {str(len(self.assignments))}', score_change))
 
     def add_midsem_exam(self, score):
         grade = score_to_grade(score)
@@ -121,7 +130,8 @@ class Student:
         # Check if the student failed the midsem exam or got a HD
         if grade == 'Fail':
             self.engagement_score -= self.failed_punishments['midsem_exam']
-            self.failed_assessments.append('Midsem Exam')
+            self.failed_assessments.append(f'Midsem Exam: {score}')
+            self.engagement_changes.append(('Failed Midsem Exam', -self.failed_punishments['midsem_exam']))
         elif grade == 'HD':
             self.engagement_score += self.hd_rewards['midsem_exam']
         elif grade == 'D':
@@ -133,7 +143,8 @@ class Student:
         # Check if the student failed the final exam or got a HD
         if grade == 'Fail':
             self.engagement_score -= self.failed_punishments['final_exam']
-            self.failed_assessments.append('Final Exam')
+            self.failed_assessments.append(f'Final Exam: {score}')
+            self.engagement_changes.append(('Failed Final Exam', -self.failed_punishments['final_exam']))
         elif grade == 'HD':
             self.engagement_score += self.hd_rewards['final_exam']
         elif grade == 'D':
@@ -145,3 +156,9 @@ class Student:
 
     def add_attendance(self, attendance):
         self.attendance = attendance
+
+    def disengagement_reasons(self):
+        # Sort the engagement changes by the engagement score change
+        self.engagement_changes.sort(key=lambda x: x[1])
+        # Print the top 3 assessments that caused the most decrease in engagement score
+        return self.engagement_changes[:3]

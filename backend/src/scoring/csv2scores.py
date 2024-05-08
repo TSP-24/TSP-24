@@ -23,6 +23,7 @@ def calculate_engagement(csv_file, csv_name):
     if len(headers['attendance']) >= 1:
         attendance_header = headers['attendance'][0]
     
+    info = []
     engagement_scores = []
     uids = []
     failed_assessments = []
@@ -62,10 +63,13 @@ def calculate_engagement(csv_file, csv_name):
         engagement_scores.append(student.engagement_score)
         uids.append(student.uni_id)
         failed_assessments.append(student.failed_assessments)
+        info.append(student.disengagement_reasons())
         
     # Append the engagement scores to the dataframe and add uid column (if neccessary)
     if 'Uni ID' not in df.columns:
         df.insert(0, 'Uni ID', uids)
+        
+    df['Info'] = info
     df['Engagement'] = engagement_scores
     df['Failed Assessments'] = failed_assessments
     df['Fail#'] = df['Failed Assessments'].apply(len)
@@ -80,6 +84,6 @@ def calculate_engagement(csv_file, csv_name):
     df['Risk'] = pd.qcut(df['Engagement'], 5, labels=['Very high', 'High', 'Average', 'Low', 'Very low'])
     
     # Create a new DataFrame with only the 'Uni ID', 'Failed Assessments', and 'Risk' columns
-    new_df = df[['Uni ID', 'Course', 'Failed Assessments', 'Fail#', 'Late#', 'No Submit#','Risk']]
+    new_df = df[['Uni ID', 'Course', 'Info', 'Failed Assessments', 'Fail#', 'Late#', 'No Submit#', 'Engagement', 'Risk']]
 
     return new_df
