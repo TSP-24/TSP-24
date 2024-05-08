@@ -19,8 +19,10 @@ const Home = () => {
       console.log('Sending CSV content to server...');
       fetch('http://localhost:5000/your-backend-endpoint', {
         method: 'POST',
+        mode: 'cors',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*', // CORS policy
         },
         body: JSON.stringify({ data: reader.result,
                                filename: file.name})

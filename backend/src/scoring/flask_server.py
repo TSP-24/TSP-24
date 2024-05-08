@@ -1,11 +1,12 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import cross_origin
 from csv2scores import calculate_engagement
 
 app = Flask(__name__)
-CORS(app)  # This will enable CORS for all routes
 
 @app.route('/your-backend-endpoint', methods=['POST'])
+
+@cross_origin(origins=['http://localhost:3000'])
 def process_file():
     data = request.get_json()
     if 'data' not in data:
@@ -18,6 +19,14 @@ def process_file():
         return scores_df.to_json(orient='records')
     except Exception as e:
         return jsonify(error=str(e)), 500
+
+@app.route('/<path:path>', methods=['OPTIONS'])
+def options(path):
+    return '', 200, {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+        'Access-Control-Allow-Headers': 'Content-Type',
+    }
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
