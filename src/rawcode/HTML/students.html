@@ -5,6 +5,16 @@
         <link rel="stylesheet" href="../CSS/bar.css">
         <link rel="stylesheet" href="../CSS/button.css">
         <link rel="stylesheet" href="../CSS/table.css">
+
+        <script>
+            /* 
+                TODO: read the email address from the given csv/xlsx
+            */
+            function sendEmail() {
+                var addr = "u0000001@anu.edu.au";
+                window.open('mailto:' + addr);
+            }
+        </script>
     </head>
 
     <body>
@@ -15,30 +25,38 @@
                 <li><a href="index.html">Home</a></li>
               </ul>
         </div>
-        <h1>Student</h1>
+
+        <div class = "heading">
+            <h1>Students</h1>
+        </div>
+        
 
         <div class="table_background">
             <table id="main_table">
                 <tr>
                     <th>Student ID</th>
-                    <th>Assignment: Assignment 1 (SQL): Marks and Feedback (Real)</th>
-                    <th>Assignment: Assignment 2 (Database Theory): Marks and Feedback (Real)</th>
-                    <th>Quiz: NoSQL Test (Real)</th>
-                    <th>Engagement score</th>
+                    <th>Courses</th>
+                    <th>Logs</th>
+                    <th>Total failed/no submissions</th>
+                    <th>Total late Submissions</th>
+                    <th>Total score</th>
+                    <th>Notify</th>
                 </tr>
                 <tr>
                     <td>u0000001</td>
-                    <td>15.7</td>
-                    <td>8.3</td>
-                    <td>3.1</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>u0000002</td>
-                    <td>13.9</td>
-                    <td>9.6</td>
-                    <td>2.9</td>
-                    <td></td>
+                    <td>COMP0001
+                        COMP0002
+                        COMP0003
+                    </td>
+                    <td>COMP0001: late submission: assignment 1
+                        COMP0001: no submission: assignment 2
+                        COMP0001: failed: final Exam
+                        COMP0002: late submission: ...
+                    </td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>(some score)</td>
+                    <td><button class="button buttong" onclick="sendEmail()">Notify</button></td>
                 </tr>
             </table>
         </div>
