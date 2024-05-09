@@ -17,12 +17,11 @@ const Home = () => {
     const reader = new FileReader();
     reader.onload = () => {
       console.log('Sending CSV content to server...');
-      fetch('http://localhost:5000/your-backend-endpoint', {
+      fetch('http://localhost:5000/uploads', {
         method: 'POST',
         mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // CORS policy
         },
         body: JSON.stringify({ data: reader.result,
                                filename: file.name})

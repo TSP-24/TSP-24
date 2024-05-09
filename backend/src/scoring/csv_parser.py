@@ -1,10 +1,10 @@
 import os
 import pandas as pd
-import numpy as np
 import re
 from io import StringIO
+from datetime import datetime
 
-def get_course_weights(course):
+def get_assessments_info(course):
     # Get the directory of the current script
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -29,18 +29,22 @@ def get_course_weights(course):
 
     # Initialize a dictionary to store the headers for each category
     assessment_weights = {assessment_keyword: [] for assessment_keyword in assessment_keywords}
+    assessment_dls = {assessment_keyword: [] for assessment_keyword in assessment_keywords}
 
     # Classify headers
     for as_name in as_names:
         for assessment, keywords in assessment_keywords.items():
             if any(keyword in as_name.lower() for keyword in keywords):
                 percentage = df[df['Assessment'] == as_name]['Percentage'].values[0]
+                deadline = df[df['Assessment'] == as_name]['Due'].values[0]
+                deadline = datetime.strptime(deadline, '%Y/%m/%d')
                 assessment_weights[assessment].append(percentage)
+                assessment_dls[assessment].append(deadline)
                 break
         else:
             assessment_weights.setdefault('other', []).append(as_name)
 
-    return assessment_weights
+    return assessment_weights, assessment_dls
 
 def filter_headers(file, filename):  
     # Extract the numerical part (courseID) using a regular expression
@@ -55,11 +59,16 @@ def filter_headers(file, filename):
         'uni_id': ['uni', 'id'],
         'total': ['total'],
         'px_exam': ['da/px exam'],
+        'midsem_exam_d': ['submit_midsem exam', 'submit_assignment: midsem exam'],
         'midsem_exam': ['midsem exam'],
+        'final_exam_d': ['submit_final exam', 'submit_assignment: exam'],
         'final_exam': ['final exam','oral exam','exam'],
+        'assignment_d': ['submit_assignment: assignment','submit_assignment: assessment','submit_assignment'],
         'assignment': ['assignment: assignment','assignment: assessment','assignment'],
+        'quiz_d': ['submit_quiz: quiz'],
         'quiz': ['quiz: quiz'],
         'attendance': ['attendance'],
+        'lab_d': ['submit_lab'],
         'lab': ['lab'],
     }
 
@@ -80,7 +89,8 @@ def filter_headers(file, filename):
         category_headers['attendance'] = [category_headers['attendance'][0]]
 
     # Keep only the columns that fall under the categories 'uni_id', 'exam', 'assignment', 'quiz', 'attendance', and 'lab'
-    keep_categories = ['uni_id', 'px_exam', 'final_exam', 'midsem_exam', 'assignment', 'quiz', 'attendance', 'lab']
+    keep_categories = ['uni_id', 'px_exam', 'final_exam', 'final_exam_d', 'midsem_exam', 'midsem_exam_d', 
+                       'assignment', 'assignment_d', 'quiz', 'quiz_d', 'lab', 'lab_d', 'attendance']
     keep_headers = [header for category in keep_categories for header in category_headers[category]]
     df = df[keep_headers]
 
@@ -93,4 +103,4 @@ def filter_headers(file, filename):
         # Drop the original 'px_exam' and 'final_exam' columns
         df = df.drop(columns=[category_headers['px_exam'][0]])
 
-    return df, category_headers, get_course_weights(course), course
+    return df, category_headers, get_assessments_info(course), course

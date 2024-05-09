@@ -14,6 +14,7 @@ const Students = () => {
   const getColorByInfo = (info) => {
     if (info.toLowerCase().includes("inconsistent")) return 'orange';
     if (info.toLowerCase().includes("failed")) return 'red';
+    if (info.toLowerCase().includes("late")) return 'darkgreen';
     return 'black'; // Default color
   };
 
@@ -73,7 +74,21 @@ const Students = () => {
                       ))}
                     </td>
                   )
-            } 
+                }
+                else if(column === 'Late Submissions') {
+                  return (
+                    // If it is "Late submissions", we colour the assessments name to blue, and leave the mark red
+                    <td key={columnIndex}>
+                      {student[column].map((assi, assiIndex) => (
+                        <div key={assiIndex}>
+                          <span style={{ color: 'blue'}}>{assi[0]}</span>
+                          {/* Apply a different style for info[1] */}
+                          <span style={{ color: 'red'}}> {assi[1]}</span>
+                        </div>
+                      ))}
+                    </td>
+                  )
+                } 
                 else {
                   // For all other columns, we render the data as plain text
                   return <td key={columnIndex}>{student[column]}</td>;

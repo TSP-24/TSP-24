@@ -45,26 +45,40 @@ class Student:
         self.quizzes = []
         self.midsem_exam = None
         self.final_exam = None
-        self.attendance = None # Later to be implemented
-        self.labs = [] # Later to be implemented
+        self.attendance = None # TODO Later to be implemented
+        self.labs = [] # TODO Later to be implemented
 
         self.engagement_score = 100
         self.engagement_changes = []
         self.failed_assessments = []
-        self.late_submissions = [] # To be implemented!!!
+        self.late_submissions = []
+
+        self.deadlines = {
+            'quiz': [],
+            'assignment': [],
+            'midsem_exam': [],
+            'final_exam': [],
+            'lab': []
+        }
         self.weights = {
-            'quiz': 0.5,
-            'assignment': 1,
+            'quiz': 0.35,
+            'assignment': 0.7,
             'midsem_exam': 1.5,
             'final_exam': 1.5,
             'attendance': 1,
-            'labs': 1
+            'lab': 1
+        }
+        self.late_punishments = {
+            'quiz': 2,
+            'assignment': 5,
+            'midsem_exam': 10,
+            'final_exam': 15
         }
         self.failed_punishments = {
-            'quiz': 5,
-            'assignment': 10,
-            'midsem_exam': 15,
-            'final_exam': 20
+            'quiz': 2,
+            'assignment': 5,
+            'midsem_exam': 10,
+            'final_exam': 15
         }
         self.hd_rewards = {
             'quiz': 2,
@@ -79,16 +93,26 @@ class Student:
             'final_exam': 8
         }
 
+    def set_deadlines(self, deadlines):
+        self.deadlines = deadlines
+
     def set_weights(self, weights):
         self.weights = weights
 
-    def add_quiz(self, score):
+    def add_quiz(self, score, submission_date):
         grade = score_to_grade(score)
         self.quizzes.append((grade, score))
+
+        # Check if the student submitted the quiz late
+        if submission_date > self.deadlines['quiz'][len(self.quizzes) - 1]:
+            self.engagement_score -= self.late_punishments['quiz']
+            self.late_submissions.append((f'Quiz {str(len(self.quizzes))}:', score))
+            self.engagement_changes.append((f'Late Quiz {str(len(self.quizzes))}', -self.late_punishments['quiz']))
+
         # Check if the student failed the quiz or got a HD
         if grade == 'Fail':
             self.engagement_score -= self.failed_punishments['quiz']
-            self.failed_assessments.append(f'Quiz {str(len(self.quizzes))}: {score}')
+            self.failed_assessments.append((f'Quiz {str(len(self.quizzes))}:', score))
             self.engagement_changes.append((f'Failed Quiz {str(len(self.quizzes))}', -self.failed_punishments['quiz']))
         elif grade == 'HD':
             self.engagement_score += self.hd_rewards['quiz']
@@ -103,13 +127,20 @@ class Student:
             if score_change < 0:
                 self.engagement_changes.append((f'Inconsistent Quiz {str(len(self.quizzes))}', score_change))
 
-    def add_assignment(self, score):
+    def add_assignment(self, score, submission_date):
         grade = score_to_grade(score)
         self.assignments.append((grade, score))
+
+        # Check if the student submitted the assignment late
+        if submission_date > self.deadlines['assignment'][len(self.assignments) - 1]:
+            self.engagement_score -= self.late_punishments['assignment']
+            self.late_submissions.append((f'Assignment {str(len(self.assignments))}:', score))
+            self.engagement_changes.append((f'Late Assignment {str(len(self.assignments))}', -self.late_punishments['assignment']))
+
         # Check if the student failed the assignment or got a HD
         if grade == 'Fail':
             self.engagement_score -= self.failed_punishments['assignment']
-            self.failed_assessments.append(f'Assignment {str(len(self.assignments))}: {score}')
+            self.failed_assessments.append((f'Assignment {str(len(self.assignments))}:', score))
             self.engagement_changes.append((f'Failed Assignment {str(len(self.assignments))}', -self.failed_punishments['assignment']))
         elif grade == 'HD':
             self.engagement_score += self.hd_rewards['assignment']
@@ -130,7 +161,7 @@ class Student:
         # Check if the student failed the midsem exam or got a HD
         if grade == 'Fail':
             self.engagement_score -= self.failed_punishments['midsem_exam']
-            self.failed_assessments.append(f'Midsem Exam: {score}')
+            self.failed_assessments.append((f'Midsem Exam:', score))
             self.engagement_changes.append(('Failed Midsem Exam', -self.failed_punishments['midsem_exam']))
         elif grade == 'HD':
             self.engagement_score += self.hd_rewards['midsem_exam']
@@ -143,12 +174,15 @@ class Student:
         # Check if the student failed the final exam or got a HD
         if grade == 'Fail':
             self.engagement_score -= self.failed_punishments['final_exam']
-            self.failed_assessments.append(f'Final Exam: {score}')
+            self.failed_assessments.append((f'Final Exam:', score))
             self.engagement_changes.append(('Failed Final Exam', -self.failed_punishments['final_exam']))
         elif grade == 'HD':
             self.engagement_score += self.hd_rewards['final_exam']
         elif grade == 'D':
             self.engagement_score += self.d_rewards['final_exam']
+
+
+
 
     # TODO: Implement attendance and labs
     def add_lab(self, score):
@@ -157,8 +191,10 @@ class Student:
     def add_attendance(self, attendance):
         self.attendance = attendance
 
+
+
     def disengagement_reasons(self):
         # Sort the engagement changes by the engagement score change
         self.engagement_changes.sort(key=lambda x: x[1])
         # Print the top 3 assessments that caused the most decrease in engagement score
-        return self.engagement_changes[:3]
+        return self.engagement_changes[:5]
