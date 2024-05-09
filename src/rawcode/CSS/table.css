@@ -25,7 +25,10 @@
     padding: 20px;
 }
 
-td {white-space: pre;}
+td {
+    white-space: pre-line;
+    text-align: justify;
+}
 
 .heading {
     padding-left: 5%;
