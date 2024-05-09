@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Student logs</title>
+
+        <link rel="stylesheet" href="../CSS/bar.css">
+        <link rel="stylesheet" href="../CSS/button.css">
+        <link rel="stylesheet" href="../CSS/table.css">
+
+        <!-- <script type="text/JavaScript" src="../JavaScript/clickTable.js"></script> -->
+        <script>
+            /* 
+                TODO: read the email address from the given csv/xlsx
+            */
+            function sendEmail() {
+                var addr = "u0000001@anu.edu.au";
+                window.open('mailto:' + addr);
+            }
+        </script>
+    </head>
+
+    <body>
+        <div>
+            <ul>
+                <li><a href="search.html">Search</a></li>
+                <li><a href="students.html">Students</a></li>
+                <li><a href="index.html">Home</a></li>
+              </ul>
+        </div>
+
+        <div class = "heading">
+            <h1>Student</h1>
+            <br>
+            <h3>EGHKHI LSPCHV</h3>
+            <h3>ID: u0000001</h3>
+            <h3>Disengagement score: </h3>
+        </div>
+        
+
+        <div class="table_background">
+            <table id="main_table">
+                <tr>
+                    <th>Course</th>
+                    <th>Details</th>
+                    <th>Score</th>
+                </tr>
+                <tr onclick="clickTableRow(this)">
+                    <td>COMP2400</td>
+                    <td>
+                        Assignment 1: late submission, 4/10
+                        Assignment 2: no submission, 0/10
+                        Assignment 3: submitted, 20/30
+                        Exam: sitted, 20/30
+                    </td>
+                    <td>
+                        (int) score
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br>
+        <!-- Notify not implemented -->
+        <button class="button buttong" onclick="sendEmail()">Notify student</button>
+    </body>
+
+</html>
