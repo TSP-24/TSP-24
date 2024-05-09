@@ -59,7 +59,22 @@ const Students = () => {
                       ))}
                     </td>
                   );
-                } else {
+                } 
+                else if(column === 'Failed Assessments') {
+                  return (
+                    // If it is "Failed assessments", we colour the assessments name to blue, and leave the mark red
+                    <td key={columnIndex}>
+                      {student[column].map((assi, assiIndex) => (
+                        <div key={assiIndex}>
+                          <span style={{ color: 'blue'}}>{assi[0]}</span>
+                          {/* Apply a different style for info[1] */}
+                          <span style={{ color: 'red'}}> {assi[1]}</span>
+                        </div>
+                      ))}
+                    </td>
+                  )
+            } 
+                else {
                   // For all other columns, we render the data as plain text
                   return <td key={columnIndex}>{student[column]}</td>;
                 }
