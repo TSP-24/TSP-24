@@ -11,12 +11,6 @@ const Students = () => {
 
   const columns = parsedData.length > 0 ? Object.keys(parsedData[0]) : [];
 
-  const getColorByInfo = (info) => {
-    if (info.toLowerCase().includes("inconsistent")) return 'orange';
-    if (info.toLowerCase().includes("failed")) return 'red';
-    return 'black'; // Default color
-  };
-
   return (
     <div className="App">
       <ul>{/* {channelList.map(item=> <li key={item.id}>{item.name}</li>)} */}</ul>
@@ -44,29 +38,14 @@ const Students = () => {
             </tr>
           </thead>
           <tbody>
-          {parsedData.map((student, index) => (
-            <tr key={index}>
-              {columns.map((column, columnIndex) => {
-                // Check if the current column is 'Info'
-                if (column === 'Info') {
-                  return (
-                    // If it is 'Info', we render a cell with styled divs for each piece of info
-                    <td key={columnIndex}>
-                      {student[column].map((info, infoIndex) => (
-                        <div key={infoIndex} style={{ color: getColorByInfo(info[0]) }}>
-                          {info[0]}: {info[1]}
-                        </div>
-                      ))}
-                    </td>
-                  );
-                } else {
-                  // For all other columns, we render the data as plain text
-                  return <td key={columnIndex}>{student[column]}</td>;
-                }
-              })}
-            </tr>
-          ))}
-        </tbody>
+            {parsedData.map((student, index) => (
+              <tr key={index}>
+                {columns.map((column, columnIndex) => (
+                  <td key={columnIndex}>{student[column]}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
       <br />
