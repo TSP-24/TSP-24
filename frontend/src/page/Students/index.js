@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 const { Option } = Select;
 
 
-const Students = ({}) => {
+const Students = () => {
   const [sortColumn, setSortColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState('asc');
   const [filters, setFilters] = useState({});
