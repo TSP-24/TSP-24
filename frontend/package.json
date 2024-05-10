@@ -24,7 +24,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"cd ../backend/src/scoring && . venv/scripts/activate && python flask_server.py\"",
+    "start": "concurrently \"react-scripts start\" \"cd ../backend/src/scoring && python flask_server.py\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
