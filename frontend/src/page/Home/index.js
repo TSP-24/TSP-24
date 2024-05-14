@@ -17,7 +17,7 @@ const Home = () => {
     const reader = new FileReader();
     reader.onload = () => {
       console.log('Sending CSV content to server...');
-      fetch('http://localhost:5000/uploads', {
+      fetch('http://localhost:8000/uploads', {
         method: 'POST',
         mode: 'cors',
         headers: {
