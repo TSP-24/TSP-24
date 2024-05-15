@@ -19,8 +19,8 @@ def get_assessments_info(course):
     as_names = df['Assessment']
 
     assessment_keywords = {
-        'final_exam': ['final exam','oral exam'],
         'midsem_exam': ['midsem exam'],
+        'final_exam': ['final exam', 'oral exam', 'exam'],
         'assignment': ['assignment: assignment','assignment: assessment','assignment'],
         'quiz': ['quiz: quiz'],
         'attendance': ['attendance'],
@@ -104,3 +104,26 @@ def filter_headers(file, filename):
         df = df.drop(columns=[category_headers['px_exam'][0]])
 
     return df, category_headers, get_assessments_info(course), course
+
+def get_all_assessments_info(course):
+    info = get_assessments_info(course)[0]
+    assessments = []
+    for assessment, values in info.items():
+        if values:
+            if   assessment == 'final_exam':
+                assessments.append(f'Final Exam ({values[0]}%)')
+            elif assessment == 'midsem_exam':
+                assessments.append(f'Midsem Exam ({values[0]}%)')
+            elif assessment == 'attendance':
+                assessments.append(f'Attendance ({values[0]}%)')
+            elif assessment == 'assignment':
+                for asg in values:
+                    assessments.append(f'Assignment ({asg}%)')
+            elif assessment == 'quiz':
+                for quiz in values:
+                    assessments.append(f'Quiz ({quiz}%)')
+            elif assessment == 'lab':
+                for lab in values:
+                    assessments.append(f'Lab ({lab}%)')
+    
+    return assessments

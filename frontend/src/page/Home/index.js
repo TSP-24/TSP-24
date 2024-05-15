@@ -28,8 +28,11 @@ const Home = () => {
       })
       .then(response => response.json())
       .then(data => {
-        dispatch(setImportedData(data));
-        console.log('importedData updated (JSON format):', data);
+        const scores = JSON.parse(data.scores); // Parse the scores from the response
+        const assessments = data.assessments;   // Parse the assessments from the response
+        dispatch(setImportedData(scores));      // Use the scores data here
+        console.log('Assessments parsed (JSON format):', assessments);
+        console.log('importedData updated (JSON format):', scores);
         if (callback) callback();
       })
       .catch(error => console.error('Error during fetch:', error));

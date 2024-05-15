@@ -14,8 +14,11 @@ def process_file():
     csv_filename = data['filename']
     try:
         # Convert the string data to a DataFrame
-        scores_df = calculate_engagement(csv_data, csv_filename)
-        return scores_df.to_json(orient='records')
+        scores_df, assessments = calculate_engagement(csv_data, csv_filename)
+        # Convert scores_df to JSON
+        scores_json = scores_df.to_json(orient='records')
+        # Return both as part of the response
+        return jsonify(scores=scores_json, assessments=assessments)
     except Exception as e:
         return jsonify(error=str(e)), 500
 

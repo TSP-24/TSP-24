@@ -1,6 +1,6 @@
 import pandas as pd
 from student import Student
-from csv_parser import filter_headers
+from csv_parser import filter_headers, get_all_assessments_info
 from datetime import datetime
 
 def calculate_engagement(csv_file, csv_name):
@@ -81,4 +81,4 @@ def calculate_engagement(csv_file, csv_name):
     # Create a new DataFrame with only the 'Uni ID', 'Failed Assessments', and 'Risk' columns
     new_df = df[['Uni ID', 'Course', 'Info', 'Failed Assessments', 'Late Submissions','Fail#', 'Late#', 'No Submit#', 'Engagement', 'Risk']]
 
-    return new_df
+    return new_df, get_all_assessments_info(course)

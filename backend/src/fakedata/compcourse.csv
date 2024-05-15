@@ -9,9 +9,9 @@ CourseID,Course Name,Convenor,Assessment,Type,Due,Mark,Percentage
 3620,AI,Bob,Assignment: Assessment 2 ,Hurdle,2024/2/4,100,20
 3620,AI,Bob,Assignment: Assessment 3 ,Normal,2024/3/5,100,20
 3620,AI,Bob,Assignment: Exam ,Normal,2024/4/6,100,50
-3630,ToC,Charlie,Quiz,Hurdle,2024/2/2,15,5
-3630,ToC,Charlie,Exam1,Normal,2024/4/20,100,40
-3630,ToC,Charlie,Exam2,Normal,2024/6/20,100,55
+3630,ToC,Charlie,Quiz: Quiz,Hurdle,2024/2/2,15,5
+3630,ToC,Charlie,Midsem Exam: Exam1,Normal,2024/4/20,100,40
+3630,ToC,Charlie,Final Exam: Exam2,Normal,2024/6/20,100,55
 2400,Relational Databases,David,Quiz: Quiz 1 (Real),Normal,2024/1/1,0.5,0.25
 2400,Relational Databases,David,Quiz: Quiz 2 (Real),Normal,2024/1/9,0.5,0.25
 2400,Relational Databases,David,Quiz: Quiz 3 (Real),Normal,2024/1/16,0.5,0.25
