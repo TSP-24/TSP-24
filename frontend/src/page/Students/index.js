@@ -51,14 +51,26 @@ const Students = () => {
   const assessments = useSelector((state) => state.importedData.assessments);
 
   // Generate a unique key for each column
+  // const acolumns = assessments.map((assessment, index) => ({
+  //   title: assessment,
+  //   dataIndex: `assessment${index}`,
+  //   key: `assessment${index}`,
+  //   onCell: (record) => ({
+  //     record,
+  //     inputType: 'text',
+  //     dataIndex: `assessment${index}`,
+  //     title: assessment,
+  //     editing: true, // We set it as true to have all text boxes editable
+  //   }),
+  // }));
   const acolumns = assessments.map((assessment, index) => ({
     title: assessment,
-    dataIndex: `assessment${index}`,
-    key: `assessment${index}`,
+    dataIndex: assessment,
+    key: assessment,
     onCell: (record) => ({
       record,
       inputType: 'text',
-      dataIndex: `assessment${index}`,
+      dataIndex: assessment,
       title: assessment,
       editing: true, // We set it as true to have all text boxes editable
     }),
