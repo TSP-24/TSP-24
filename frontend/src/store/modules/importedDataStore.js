@@ -2,13 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const importedDataStore = createSlice({
   name: 'importedData',
-  initialState: [],
+  initialState: { scores: [], assessments: [] },
   reducers: {
-    setImportedData: (state, action) => {
-      return action.payload;
-    }
-  }
+    setScores: (state, action) => {
+      state.scores = action.payload;
+    },
+    setAssessments: (state, action) => {
+      state.assessments = action.payload;
+    },
+  },
 });
 
-export const { setImportedData } = importedDataStore.actions;
+export const { setScores, setAssessments } = importedDataStore.actions;
 export default importedDataStore.reducer;

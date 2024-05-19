@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button, Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
-import { setImportedData } from "../../store/modules/importedDataStore";
+import { setScores, setAssessments } from "../../store/modules/importedDataStore";
 
 
 const { Dragger } = Upload;
@@ -30,7 +30,8 @@ const Home = () => {
       .then(data => {
         const scores = JSON.parse(data.scores); // Parse the scores from the response
         const assessments = data.assessments;   // Parse the assessments from the response
-        dispatch(setImportedData(scores));      // Use the scores data here
+        dispatch(setScores(scores));            // Dispatch setScores action with scores data
+        dispatch(setAssessments(assessments));  // Dispatch setAssessments action with assessments data
         console.log('Assessments parsed (JSON format):', assessments);
         console.log('importedData updated (JSON format):', scores);
         if (callback) callback();
