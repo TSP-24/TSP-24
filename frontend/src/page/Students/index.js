@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Select } from 'antd';
 import { Link } from "react-router-dom";
-import { useSelector } from 'react-redux';
 import { Table, Input, Button, Form } from 'antd';
+import { useSelector, useDispatch } from 'react-redux';
+import { setScores, setAssessments } from "../../store/modules/importedDataStore";
 
 const EditableCell = ({
   editing,
@@ -49,6 +50,7 @@ const Students = () => {
   const importedData = useSelector((state) => state.importedData.scores);
   const [form] = Form.useForm();
   const assessments = useSelector((state) => state.importedData.assessments);
+  const dispatch = useDispatch();
 
   // Generate a unique key for each column
   // const acolumns = assessments.map((assessment, index) => ({
@@ -84,9 +86,25 @@ const Students = () => {
   const handleSave = () => {
     form.validateFields()
       .then((values) => {
-        // TODO:
-        // Here you would generally handle the submission of text box values (values)
-        console.log(values);
+        // Send the values data to the server
+        fetch('http://localhost:8000/weights', {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values)
+        })
+        .then(response => response.json())
+        .then(data => {
+          const scores = JSON.parse(data.scores); // Parse the scores from the response
+          const assessments = data.assessments;   // Parse the assessments from the response
+          dispatch(setScores(scores));            // Dispatch setScores action with scores data
+          dispatch(setAssessments(assessments));  // Dispatch setAssessments action with assessments data
+          console.log('Assessments parsed (JSON format):', assessments);
+          console.log('importedData updated (JSON format):', scores);
+        })
+        .catch(error => console.error('Error during fetch:', error));
       })
       .catch((info) => {
         console.log('Validate Failed:', info);

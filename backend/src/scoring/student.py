@@ -61,12 +61,12 @@ class Student:
             'lab': []
         }
         self.weights = {
-            'quiz': 0.35,
-            'assignment': 0.7,
-            'midsem_exam': 1.5,
-            'final_exam': 1.5,
-            'attendance': 1,
-            'lab': 1
+            'quiz': [0.35] * 12,
+            'assignment': [0.7] * 12,
+            'midsem_exam': [1],
+            'final_exam': [1],
+            'attendance': [1],
+            'lab': [1] * 12
         }
         self.late_punishments = {
             'quiz': 2,
@@ -102,84 +102,93 @@ class Student:
     def add_quiz(self, score, submission_date):
         grade = score_to_grade(score)
         self.quizzes.append((grade, score))
+        q_number = len(self.quizzes)
+        q_weight = self.weights['quiz'][q_number - 1]
 
         # Check if the student submitted the quiz late
-        if submission_date > self.deadlines['quiz'][len(self.quizzes) - 1]:
-            self.engagement_score -= self.late_punishments['quiz']
-            self.late_submissions.append((f'Quiz {str(len(self.quizzes))}:', score))
-            self.engagement_changes.append((f'Late Quiz {str(len(self.quizzes))}', -self.late_punishments['quiz']))
+        if submission_date > self.deadlines['quiz'][q_number - 1]:
+            score_change = np.round(-self.late_punishments['quiz']*q_weight)
+            self.engagement_score += score_change
+            self.late_submissions.append((f'Quiz {str(q_number)}:', score))
+            self.engagement_changes.append((f'Late Quiz {str(q_number)}', score_change))
 
         # Check if the student failed the quiz or got a HD
         if grade == 'Fail':
-            self.engagement_score -= self.failed_punishments['quiz']
-            self.failed_assessments.append((f'Quiz {str(len(self.quizzes))}:', score))
-            self.engagement_changes.append((f'Failed Quiz {str(len(self.quizzes))}', -self.failed_punishments['quiz']))
+            score_change = np.round(-self.failed_punishments['quiz']*q_weight)
+            self.engagement_score += score_change
+            self.failed_assessments.append((f'Quiz {str(q_number)}:', score))
+            self.engagement_changes.append((f'Failed Quiz {str(q_number)}', score_change))
         elif grade == 'HD':
-            self.engagement_score += self.hd_rewards['quiz']
+            self.engagement_score += np.round(self.hd_rewards['quiz']*q_weight)
         elif grade == 'D':
-            self.engagement_score += self.d_rewards['quiz']
+            self.engagement_score += np.round(self.d_rewards['quiz']*q_weight)
 
         # Check if the student is consistent with their quiz scores
         if len(self.quizzes) > 1:
             inconsistency = chi_square_compare(self.quizzes)
-            score_change = np.round(inconsistency * self.weights['quiz'])
+            score_change = np.round(inconsistency * q_weight)
             self.engagement_score += score_change
             if score_change < 0:
-                self.engagement_changes.append((f'Inconsistent Quiz {str(len(self.quizzes))}', score_change))
+                self.engagement_changes.append((f'Inconsistent Quiz {str(q_number)}', score_change))
 
     def add_assignment(self, score, submission_date):
         grade = score_to_grade(score)
         self.assignments.append((grade, score))
-
+        as_number = len(self.assignments)
+        as_weight = self.weights['assignment'][as_number - 1]
         # Check if the student submitted the assignment late
-        if submission_date > self.deadlines['assignment'][len(self.assignments) - 1]:
-            self.engagement_score -= self.late_punishments['assignment']
-            self.late_submissions.append((f'Assignment {str(len(self.assignments))}:', score))
-            self.engagement_changes.append((f'Late Assignment {str(len(self.assignments))}', -self.late_punishments['assignment']))
+        if submission_date > self.deadlines['assignment'][as_number - 1]:
+            score_change = np.round(-self.late_punishments['assignment']*as_weight)
+            self.engagement_score += score_change
+            self.late_submissions.append((f'Assignment {str(as_number)}:', score))
+            self.engagement_changes.append((f'Late Assignment {str(as_number)}', score_change))
 
         # Check if the student failed the assignment or got a HD
         if grade == 'Fail':
-            self.engagement_score -= self.failed_punishments['assignment']
-            self.failed_assessments.append((f'Assignment {str(len(self.assignments))}:', score))
-            self.engagement_changes.append((f'Failed Assignment {str(len(self.assignments))}', -self.failed_punishments['assignment']))
+            score_change = np.round(-self.failed_punishments['assignment']*as_weight)
+            self.engagement_score += score_change
+            self.failed_assessments.append((f'Assignment {str(as_number)}:', score))
+            self.engagement_changes.append((f'Failed Assignment {str(as_number)}', score_change))
         elif grade == 'HD':
-            self.engagement_score += self.hd_rewards['assignment']
+            self.engagement_score += np.round(self.hd_rewards['assignment']*as_weight)
         elif grade == 'D':
-            self.engagement_score += self.d_rewards['assignment']
+            self.engagement_score += np.round(self.d_rewards['assignment']*as_weight)
         
         # Check if the student is consistent with their assignment scores
         if len(self.assignments) > 1:
             inconsistency = chi_square_compare(self.assignments)
-            score_change = np.round(inconsistency * self.weights['assignment'])
+            score_change = np.round(inconsistency * as_weight)
             self.engagement_score += score_change
             if score_change < 0:
-                self.engagement_changes.append((f'Inconsistent Assignment {str(len(self.assignments))}', score_change))
+                self.engagement_changes.append((f'Inconsistent Assignment {str(as_number)}', score_change))
 
     def add_midsem_exam(self, score):
         grade = score_to_grade(score)
         self.midsem_exam = (grade, score)
         # Check if the student failed the midsem exam or got a HD
         if grade == 'Fail':
-            self.engagement_score -= self.failed_punishments['midsem_exam']
+            diseng_score = np,round(self.failed_punishments['midsem_exam'] * self.weights['midsem_exam'][0])
+            self.engagement_score -= diseng_score
             self.failed_assessments.append((f'Midsem Exam:', score))
-            self.engagement_changes.append(('Failed Midsem Exam', -self.failed_punishments['midsem_exam']))
+            self.engagement_changes.append(('Failed Midsem Exam', -diseng_score))
         elif grade == 'HD':
-            self.engagement_score += self.hd_rewards['midsem_exam']
+            self.engagement_score += np.round(self.hd_rewards['midsem_exam'] * self.weights['midsem_exam'][0])
         elif grade == 'D':
-            self.engagement_score += self.d_rewards['midsem_exam']
+            self.engagement_score += np.round(self.d_rewards['midsem_exam'] * self.weights['midsem_exam'][0])
 
     def add_final_exam(self, score):
         grade = score_to_grade(score)
         self.final_exam = (grade, score)
         # Check if the student failed the final exam or got a HD
         if grade == 'Fail':
-            self.engagement_score -= self.failed_punishments['final_exam']
+            diseng_score = np.round(self.failed_punishments['final_exam'] * self.weights['final_exam'][0])
+            self.engagement_score -= diseng_score
             self.failed_assessments.append((f'Final Exam:', score))
-            self.engagement_changes.append(('Failed Final Exam', -self.failed_punishments['final_exam']))
+            self.engagement_changes.append(('Failed Final Exam', -diseng_score))
         elif grade == 'HD':
-            self.engagement_score += self.hd_rewards['final_exam']
+            self.engagement_score += np.round(self.hd_rewards['final_exam'] * self.weights['final_exam'][0])
         elif grade == 'D':
-            self.engagement_score += self.d_rewards['final_exam']
+            self.engagement_score += np.round(self.d_rewards['final_exam'] * self.weights['final_exam'][0])
 
 
 

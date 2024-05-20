@@ -1,9 +1,9 @@
 import pandas as pd
 from student import Student
-from csv_parser import filter_headers, get_all_assessments_info
+from csv_parser import filter_headers, get_all_assessments_info, get_weights
 from datetime import datetime
 
-def calculate_engagement(csv_file, csv_name):
+def calculate_engagement(csv_file, csv_name, weights = None):
     df, headers, as_info, course = filter_headers(csv_file, csv_name)
 
     final_exam_header = headers['final_exam']
@@ -28,8 +28,10 @@ def calculate_engagement(csv_file, csv_name):
     for index, row in df.iterrows():
         # Create student object
         student = Student('u' + str(10000000+index))
-        # Set the weights (Not yet implemented)
-        # student.set_weights(as_info[0])
+        # Set weights if provided
+        if weights is not None:
+            student.set_weights(get_weights(weights))
+        # Set deadlines
         student.set_deadlines(as_info[1])
 
         # Quiz engagement

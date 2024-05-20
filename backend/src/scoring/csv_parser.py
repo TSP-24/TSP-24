@@ -41,8 +41,6 @@ def get_assessments_info(course):
                 assessment_weights[assessment].append(percentage)
                 assessment_dls[assessment].append(deadline)
                 break
-        else:
-            assessment_weights.setdefault('other', []).append(as_name)
 
     return assessment_weights, assessment_dls
 
@@ -117,13 +115,35 @@ def get_all_assessments_info(course):
             elif assessment == 'attendance':
                 assessments.append(f'Attendance ({values[0]}%)')
             elif assessment == 'assignment':
-                for asg in values:
-                    assessments.append(f'Assignment ({asg}%)')
+                for i,asg in enumerate(values):
+                    assessments.append(f'Assignment {i+1} ({asg}%)')
             elif assessment == 'quiz':
-                for quiz in values:
-                    assessments.append(f'Quiz ({quiz}%)')
+                for i,quiz in enumerate(values):
+                    assessments.append(f'Quiz {i+1} ({quiz}%)')
             elif assessment == 'lab':
                 for lab in values:
                     assessments.append(f'Lab ({lab}%)')
     
     return assessments
+# Parse the weights sent by Front-End
+def get_weights(as_names):
+    assessment_keywords = {
+        'midsem_exam': ['midsem exam'],
+        'final_exam': ['final exam', 'oral exam', 'exam'],
+        'assignment': ['assignment: assignment','assignment: assessment','assignment'],
+        'quiz': ['quiz: quiz', 'quiz'],
+        'attendance': ['attendance'],
+        'lab': ['lab'],
+    }
+
+    # Initialize a dictionary to store the headers for each category
+    assessment_weights = {assessment_keyword: [] for assessment_keyword in assessment_keywords}
+
+    # Classify headers
+    for as_name in as_names.keys():
+        for assessment, keywords in assessment_keywords.items():
+            if any(keyword in as_name.lower() for keyword in keywords):
+                assessment_weights[assessment].append(float(as_names[as_name]))
+                break
+
+    return assessment_weights
